@@ -1,7 +1,9 @@
-"THE433"
+THE433
+
 "control 433MHz (compatible with Arduino libs) sockets/devices through web and time rules"
-(esp8266 + RF 433 transmitter + Arduino IDE)
+
 ----------------
+(esp8266 + RF 433 transmitter + Arduino IDE)
 
 This is a sketch for controlling RF remote control sockets or relays that operate at the 433MHz frequency
 and are compatible with the Arduino/esp8266 RCSwitch libraries.
