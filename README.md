@@ -83,6 +83,24 @@ Libraries needed:
 
 ----------------
 
+Example usage: 
+
+ESP8266 in the source is set as a WiFi station with a static IP 192.168.1.101
+
+- navigate with your browser at this IP 
+- here you can enter either a command to activate a connected device (you must edit the source code) i.e. SWITCH 1 ON
+  or you can enter the provided keyword to enter the Time Commands interface i.e. ENTERTIMECOMMANDS
+- at the Time Commands interface you can select a function you want to be executed at a specific time
+- select the time to activate and submit
+- you'll have to restart your esp8266 and you'll be informed about this
+- after esp8266 restarts and reconnects you'll find the saved Time Command at the bottom of the web interface (from there you can also delete it)
+
+You can see some screenshots and a video here: https://nobugsjustfeatures.wordpress.com/2016/03/31/the433/
+
+----------------
+
+LICENSE
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
