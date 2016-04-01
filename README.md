@@ -45,6 +45,9 @@ are executed and deletes them from the SPIFFS save file.
 
 ! If your esp8266 can't get the NTP time then Time Commands are not available !
 
+! The esp8266 does not have an RTC. This sketch is based in software time keeping
+with the Time library and it will have some drift overtime. A restart of the device will update time !
+
 ----------------
 
 To use this you have to know how to work with RF 433MHz switches/sockets and have
