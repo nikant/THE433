@@ -98,7 +98,7 @@ ESP8266 in the source is set as a WiFi station with a static IP 192.168.1.101
 - you'll have to restart your esp8266 and you'll be informed about this
 - after esp8266 restarts and reconnects you'll find the saved Time Command at the bottom of the web interface (from there you can also delete it)
 
-You can see some screenshots and a video here: https://nobugsjustfeatures.wordpress.com/2016/04/02/the433-home-automation-with-esp8266-nodemcu-with-433mhz/
+You can see some screenshots and a video here: https://nobugsjustfeatures.wordpress.com/2016/04/02/the433-home-automation-with-esp8266-nodemcu/
 
 ----------------
 
