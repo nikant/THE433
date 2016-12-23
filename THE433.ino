@@ -741,6 +741,8 @@ void RemoveLinesSpiffsTC(String Line2Remove) {
 
 // -------------------------------- setup & loop ---------------------------------
 void setup(void) {
+  WiFi.persistent(false);
+ 
   pinMode(ONBOARDLED, OUTPUT);
   byte ledStatus = HIGH;
 
