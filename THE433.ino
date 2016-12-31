@@ -55,7 +55,7 @@ Libraries needed:
 - RFControl library for 433MHz too.. // https://github.com/pimatic/RFControl
 - (not a library) espWiFi2eeprom  // https://github.com/nikant/espWiFi2eeprom
 - Time library // https://github.com/PaulStoffregen/Time
-- TimeAlarms library modified dtNBR_ALARMS from 6 to 20 // https://github.com/PaulStoffregen/TimeAlarms
+- TimeAlarms library modified dtNBR_ALARMS from 6 to 20, NO NEED WITH THE NEW LIBRARY // https://github.com/PaulStoffregen/TimeAlarms
 - TimeZone library // https://github.com/JChristensen/Timezone
 
 ----------------
