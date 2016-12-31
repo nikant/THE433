@@ -1,5 +1,6 @@
 /*
 "THE433"
+"ESP8266 RF433 Interface"
 "control 433MHz (compatible with Arduino libs) sockets/devices through web and time rules"
 
 This program is free software: you can redistribute it and/or modify
