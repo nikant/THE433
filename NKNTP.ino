@@ -93,9 +93,8 @@ void getTheNTPTime() {
 
     // set time to local timezone
     setTime(myTZ.toLocal(epoch));
-    
-    NTPsuccess = true;
 
+    NTPsuccess = true;
   }
 }
 
@@ -132,7 +131,7 @@ void NTP2localTime() {
     delay(1000);
     getTheNTPTime();
     gettimestamp += 1;
-    if (gettimestamp == 5) {
+    if (gettimestamp == 19) {
       NTPsuccess = false;
       break;
     }
