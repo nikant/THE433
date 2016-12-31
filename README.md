@@ -82,7 +82,7 @@ Libraries needed:
 - TimeAlarms library modified dtNBR_ALARMS from 6 to 20 // https://github.com/PaulStoffregen/TimeAlarms
 - TimeZone library // https://github.com/JChristensen/Timezone
 
-----------------
+--
 - thanks goes to fivosv for his patience to help me
 ----------------
 
