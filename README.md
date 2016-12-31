@@ -70,7 +70,7 @@ used/tested Arduino IDE: 1.6.5-r5
 
 Files:
 * THE433.ino // main sketch
-* NKTP.h & NKNTP.ino // get NTP time and convert to local time. Needs modified Timezone library, check NKNTP.h
+* NKTP.h & NKNTP.ino // get NTP time and convert to local time
 * espWiFi2eeprom.h & espWiFi2eeprom.ino // esp8266 WiFi configuration to eeprom manager for Arduino IDE, check espWiFi2eeprom.h
 
 Libraries needed:
