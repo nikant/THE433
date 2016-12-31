@@ -1,6 +1,6 @@
-THE433
+# THE433
 
-"control 433MHz (compatible with Arduino libs) sockets/devices through web and time rules"
+## "control 433MHz (compatible with Arduino libs) sockets/devices through web and time rules"
 
 ----------------
 (esp8266 + RF 433 transmitter + Arduino IDE)
@@ -19,20 +19,20 @@ Time Commands are based on the TimeAlarms library.
 Time Commands (up to 10) execute your functions that fire
 the 433MHz sockets operating devices and can be set:
 
-- Alarm Once ! up to 7 days ahead.. no more !
+* Alarm Once ! up to 7 days ahead.. no more !
 (once when the time next reaches the given hour, minute)
 i.e. now it's Monday 18:10. If you set an Alarm Once for 18:15 it will fire today.
 If you set it for 18:05 it will fire the next day (Tuesday) at 18:05.
 
-- Daily Alarm Repeat
+* Daily Alarm Repeat
 (every day at the given hour, minute)
 
-- Weekly Alarm Once ! up to 7 days ahead.. no more !
+* Weekly Alarm Once ! up to 7 days ahead.. no more !
 (once only on the next DayOfWeek, hour, minute)
 If you set as day the running day and hour after the current hour
 the alarm will fire today.
 
-- Weekly Alarm Repeat
+* Weekly Alarm Repeat
 (every week on the given DayOfWeek, hour, minute)
 
 
@@ -69,23 +69,22 @@ to command an RF switch.
 used/tested Arduino IDE: 1.6.5-r5
 
 Files:
-- THE433.ino // main sketch
-- NKTP.h & NKNTP.ino // get NTP time and convert to local time. Needs modified Timezone library, check NKNTP.h
-- espWiFi2eeprom.h & espWiFi2eeprom.ino // esp8266 WiFi configuration to eeprom manager for Arduino IDE, check espWiFi2eeprom.h
+* THE433.ino // main sketch
+* NKTP.h & NKNTP.ino // get NTP time and convert to local time. Needs modified Timezone library, check NKNTP.h
+* espWiFi2eeprom.h & espWiFi2eeprom.ino // esp8266 WiFi configuration to eeprom manager for Arduino IDE, check espWiFi2eeprom.h
 
 Libraries needed:
-- ESP/Arduino core (used working version 2.3.0)
-- RCSwitch library for 433MHz RF control // https://github.com/sui77/rc-switch/
-- RFControl library for 433MHz too.. // https://github.com/pimatic/RFControl
-- (not a library) espWiFi2eeprom  // https://github.com/nikant/espWiFi2eeprom
-- Time library // https://github.com/PaulStoffregen/Time
-- TimeAlarms library modified dtNBR_ALARMS from 6 to 20 // https://github.com/PaulStoffregen/TimeAlarms
-- TimeZone library // https://github.com/JChristensen/Timezone
+* ESP/Arduino core (used working version 2.3.0)
+* RCSwitch library for 433MHz RF control // https://github.com/sui77/rc-switch/
+* RFControl library for 433MHz too.. // https://github.com/pimatic/RFControl
+* (not a library) espWiFi2eeprom  // https://github.com/nikant/espWiFi2eeprom
+* Time library // https://github.com/PaulStoffregen/Time
+* TimeAlarms library modified dtNBR_ALARMS from 6 to 20 // https://github.com/PaulStoffregen/TimeAlarms
+* TimeZone library // https://github.com/JChristensen/Timezone
 
-- Thanks goes to fivosv for his patience to help me
-----------------
+\------------ Thanks goes to fivosv for his patience to help me \------------
 
-Example usage: 
+### Example usage: 
 
 ESP8266 in the source is set as a WiFi station with a static IP 192.168.1.101
 
@@ -101,7 +100,7 @@ You can see some screenshots and a video here: https://nobugsjustfeatures.wordpr
 
 ----------------
 
-LICENSE
+### LICENSE
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -115,6 +114,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
