@@ -74,15 +74,15 @@ Files:
 - espWiFi2eeprom.h & espWiFi2eeprom.ino // esp8266 WiFi configuration to eeprom manager for Arduino IDE, check espWiFi2eeprom.h
 
 Libraries needed:
-- ESP/Arduino core (used working version 2.1.0)
+- ESP/Arduino core (used working version 2.3.0)
 - RCSwitch library for 433MHz RF control // https://github.com/sui77/rc-switch/
+- RFControl library for 433MHz too.. // https://github.com/pimatic/RFControl
 - (not a library) espWiFi2eeprom  // https://github.com/nikant/espWiFi2eeprom
 - Time library // https://github.com/PaulStoffregen/Time
-- TimeAlarms library modified dtNBR_ALARMS from 6 to 11 // https://github.com/PaulStoffregen/TimeAlarms
-- TimeZone library modified by nikant to remove eeprom access, check NKNTP.h // https://github.com/JChristensen/Timezone
+- TimeAlarms library modified dtNBR_ALARMS from 6 to 20 // https://github.com/PaulStoffregen/TimeAlarms
+- TimeZone library // https://github.com/JChristensen/Timezone
 
-
- - thanks goes to fivosv for his patience to help me
+- thanks goes to fivosv for his patience to help me
 
 ----------------
 
