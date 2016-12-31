@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  - thanks goes to fivosv for his patience to help me
 
 ----------------
-https://github.com/nikant/THE433/blob/master/README.md
 
 used Arduino IDE: 1.6.5-r5
 
@@ -28,12 +27,13 @@ Files:
 - espWiFi2eeprom.h & espWiFi2eeprom.ino // esp8266 WiFi configuration to eeprom manager for Arduino IDE, check espWiFi2eeprom.h
 
 Libraries needed:
-- ESP/Arduino core (used working version 2.1.0)
+- ESP/Arduino core (used working version 2.3.0)
 - RCSwitch library for 433MHz RF control // https://github.com/sui77/rc-switch/
+- RFControl library for 433MHz too.. // https://github.com/pimatic/RFControl
 - (not a library) espWiFi2eeprom  // https://github.com/nikant/espWiFi2eeprom
 - Time library // https://github.com/PaulStoffregen/Time
-- TimeAlarms library modified dtNBR_ALARMS from 6 to 11 // https://github.com/PaulStoffregen/TimeAlarms
-- TimeZone library modified by nikant to remove eeprom access, check NKNTP.h // https://github.com/JChristensen/Timezone
+- TimeAlarms library modified dtNBR_ALARMS from 6 to 20 // https://github.com/PaulStoffregen/TimeAlarms
+- TimeZone library // https://github.com/JChristensen/Timezone
 
 ----------------
 
@@ -59,12 +59,13 @@ to command an RF switch.
 #include <ESP8266WebServer.h>
 #include <WiFiClient.h>
 #include <RCSwitch.h>
+#include <RFControl.h>
 #include "espWiFi2eeprom.h"  // https://github.com/nikant/espWiFi2eeprom
 #include "NKNTP.h"
 #include <Time.h>
 #include <TimeAlarms.h>  // https://www.pjrc.com/teensy/td_libs_TimeAlarms.html
 
-#define THE433_VERSION "0.5"
+#define THE433_VERSION "0.7 NTP"
 
 // Initialize the 433MHz RF switch
 RCSwitch mySwitch = RCSwitch();
@@ -79,8 +80,13 @@ ESP8266WebServer server(80);
 
 // 433MHz RF pins for esp8266 and the onboard led
 // pin 4 is GPIO4 which is D2 in the NodeMCU v1.0 board.
-const int RCSwitchPin = 4;
-const int ONBOARDLED = 2;
+#define RCSwitchPin 4
+#define RFrepeatTimes 30
+
+// set this to 1 for the NodeMCU devboard on board LED
+#define HASONBOARDLED 0
+#define ONBOARDLED 2
+
 
 // Filename of SPIFFS savefile with TimeCommands
 // ! Always with a / at the beginning of the filename !
@@ -96,20 +102,27 @@ const int ONBOARDLED = 2;
 // Function names
 void (*TCommandsFunctions[])() = {switchon1, switchoff1, switchon2, switchoff2};
 // Keywords that fire the 433MHz functions from the start page
-char* TCommandsFNames[] = {"SWITCH 1 ON", "SWITCH 1 OFF", "SWITCH 2 ON", "SWITCH 2 OFF"};
+char* TCommandsFNames[] = {"SWITCH-1-ON", "SWITCH-1-OFF", "SWITCH-2-ON", "SWITCH-2-OFF"};
 // Calculate number of functions
 #define numAvailFuncs (sizeof(TCommandsFNames)/sizeof(char *))
 
 
 // The number of alarms can be changed in the TimeAlarms header file TimeAlarms.h set by the constant dtNBR_ALARMS
 // note that the RAM used equals dtNBR_ALARMS  * 11 bytes
-// right now for THE433 project it is set to #define dtNBR_ALARMS 11
-// for 10 Alarms possible + 1 for the cleanup function
-#define MAXTCommands dtNBR_ALARMS - 1
+// right now for THE433 project it is set to #define dtNBR_ALARMS 20
+// for 10 Time Alarms possible + spares for other internal functions
+#define MAXTCommands 10
 
 // Array that holds the Time Commands that are executed Once in RAM so they can be deleted from SPIFFS save file in the future
 String alarmepochs[MAXTCommands][2];
-int countTCommands;
+int countTCommands = 0;;
+
+// NTPInterval is how long we wait until NTP next NTP server poll
+#define NTPinterval 1 * 24 * 3600000 // days * hours * milliseconds (1 day)
+int NTPcountdown = 0;
+#define NTPreboot 2
+// Tracks the time since last NTP check
+unsigned long NTPpreviousMillis = 0;
 
 // -------------------------------- START WEB and MESSAGES ---------------------------------
 // HTML Strings etc.
@@ -192,57 +205,47 @@ String TCommandsCall() {
 // -------------------------------- START 433 functions ---------------------------------
 // Main 433MHz RF functions. Can be called from main page of the web interface with the keyowrds at the top.
 
+// -------------------------------- with RCSwitch library -------------
+
+void RCSwitchCall(int PulseL, char* RCSCode, String thepinstate) {
+  if (HASONBOARDLED) digitalWrite(ONBOARDLED, LOW);
+  mySwitch.setPulseLength(PulseL);
+  mySwitch.send(RCSCode);
+  //Serial.print(F("RF SEND"));
+  pinstate = thepinstate;
+  if (HASONBOARDLED) digitalWrite(ONBOARDLED, HIGH);
+}
+
 void switchon1() {
-  digitalWrite(ONBOARDLED, LOW);
-  for (int i = 0; i <= 19; i++) {
-    mySwitch.setPulseLength(260); // this should be set according to your reading from RF receiver
-    mySwitch.send("010101010101010101010101"); // sample raw data for 433MHz RF transmitter
-    Serial.print("1 ON ");
-    Serial.println(i);
-    delay(100);
-  }
-  pinstate = F("<h2>1</h2>");
-  digitalWrite(ONBOARDLED, HIGH);
+  RCSwitchCall(260, "010001111000101001010101", "<h2>RC switch 1 ON</h2>");
 }
 
 void switchoff1() {
-  digitalWrite(ONBOARDLED, LOW);
-  for (int i = 0; i <= 19; i++) {
-    mySwitch.setPulseLength(260); // this should be set according to your reading from RF receiver
-    mySwitch.send("010101010101010101010101"); // sample raw data for 433MHz RF transmitter
-    Serial.print("1 OFF ");
-    Serial.println(i);
-    delay(100);
-  }
-  pinstate = F("<h2>0</h2>");
-  digitalWrite(ONBOARDLED, HIGH);
+  RCSwitchCall(260, "000010000000100101010100", "<h2>RC switch 1 OFF</h2>");
 }
 
+
+// -------------------------------- with RFControl library -------------
+void RFControlCall(unsigned long RFCbuckets[], char* RFCTimings, String thepinstate ) {
+  if (HASONBOARDLED) digitalWrite(ONBOARDLED, LOW);
+  RFControl::sendByCompressedTimings(RCSwitchPin, RFCbuckets, RFCTimings, RFrepeatTimes);
+  //Serial.print(F("RF SEND"));  
+  pinstate = thepinstate;
+  if (HASONBOARDLED) digitalWrite(ONBOARDLED, HIGH);
+}
+
+// ------------- BRENNENSTUHL A
 void switchon2() {
-  digitalWrite(ONBOARDLED, LOW);
-  for (int i = 0; i <= 19; i++) {
-    mySwitch.setPulseLength(260); // this should be set according to your reading from RF receiver
-    mySwitch.send("010101010101010101010101"); // sample raw data for 433MHz RF transmitter
-    Serial.print("2 ON ");
-    Serial.println(i);
-    delay(100);
-  }
-  pinstate = F("<h2>1</h2>");
-  digitalWrite(ONBOARDLED, HIGH);
+  unsigned long nsigbuckets[] = {1256, 496, 2984, 6256, 0, 0, 0, 0};
+  RFControlCall(nsigbuckets, "01101010010000000101011111011001101001000100101024", "<h2>RC2-1</h2>");
 }
 
 void switchoff2() {
-  digitalWrite(ONBOARDLED, LOW);
-  for (int i = 0; i <= 19; i++) {
-    mySwitch.setPulseLength(260); // this should be set according to your reading from RF receiver
-    mySwitch.send("010101010101010101010101"); // sample raw data for 433MHz RF transmitter
-    Serial.print("2 OFF ");
-    Serial.println(i);
-    delay(100);
-  }
-  pinstate = F("<h2>0</h2>");
-  digitalWrite(ONBOARDLED, HIGH);
+  unsigned long nsigbuckets[] = {1256, 492, 2984, 6258, 0, 0, 0, 0};
+  RFControlCall(nsigbuckets, "01101101100100000110011111011010011001001010101024", "<h2>RC2-0</h2>");
 }
+
+
 // -------------------------------- END 433 functions ---------------------------------
 
 // -------------------------------- START general functions ---------------------------------
@@ -285,21 +288,34 @@ void nullFillalarmepochs() {
 void CleanupTC() {
   //debug
   //Serial.print("tic "); Serial.println(second());
-  for (int i = 0; i < MAXTCommands; i++) {
-    if ((alarmepochs[i][0] != "") && (alarmepochs[i][1] != "")) {
-      unsigned long chcktm = alarmepochs[i][0].toInt();
-      if (chcktm > 0) {
-        // No need to set it here. It is set at main setup function at the end.
-        //chcktm = chcktm + (2 * 60); // (minutes * seconds) that must have passed in order to clean the alarm event
-        if (now() > chcktm) {
-          RemoveLinesSpiffsTC(alarmepochs[i][1]);
-          delay(100);
-          for (int j = 0; j < 2; j++)  {
-            alarmepochs[i][j] = "";
+  if (NTPsuccess) {
+    for (int i = 0; i < MAXTCommands; i++) {
+      if ((alarmepochs[i][0] != "") && (alarmepochs[i][1] != "")) {
+        unsigned long chcktm = alarmepochs[i][0].toInt();
+        if (chcktm > 0) {
+          // No need to set it here. It is set at main setup function at the end.
+          //chcktm = chcktm + (2 * 60); // (minutes * seconds) that must have passed in order to clean the alarm event
+          if (now() > chcktm) {
+            RemoveLinesSpiffsTC(alarmepochs[i][1]);
+            delay(100);
+            for (int j = 0; j < 2; j++)  {
+              alarmepochs[i][j] = "";
+            }
+            Serial.println(F("periodic cleanup: TimeCommand removed!"));
           }
-          Serial.println(F("periodic cleanup: TimeCommand removed!"));
         }
       }
+    }
+  }
+  // NTP time poll every NTPinterval
+  unsigned long NTPcurrentMillis = millis();
+  if ((unsigned long)(NTPcurrentMillis - NTPpreviousMillis) >= NTPinterval) {
+    NTP2localTime();
+    Alarm.delay(0);
+    NTPpreviousMillis = NTPcurrentMillis;
+    if (!NTPsuccess) {
+      NTPcountdown++;
+      if (NTPcountdown = NTPreboot) handle_restart();
     }
   }
 }
@@ -452,7 +468,9 @@ void handle_timecommands() {
     SServerSend += FPSTR(webPageTC_0);
     SServerSend += F("<b>You can add up to&nbsp;");
     SServerSend += MAXTCommands;
-    SServerSend += F("&nbsp;Time Commands</b>");
+    SServerSend += F("&nbsp;Time Commands<br>(used Time Command slots:&nbsp;");
+    SServerSend += countTCommands;
+    SServerSend += F(")</b>");
     SServerSend += FPSTR(webPageTC_1);
     SServerSend += TCommandsCall();
     SServerSend += FPSTR(webPageTC_2);
@@ -581,7 +599,7 @@ void handle_submit() {
       handle_root();
     } else {
       pinstate = F("<h2>-</h2>");
-      digitalWrite(ONBOARDLED, HIGH);
+      if (HASONBOARDLED) digitalWrite(ONBOARDLED, HIGH);
       delay(3000);
       handle_root();
     }
@@ -742,20 +760,20 @@ void RemoveLinesSpiffsTC(String Line2Remove) {
 // -------------------------------- setup & loop ---------------------------------
 void setup(void) {
   WiFi.persistent(false);
- 
-  pinMode(ONBOARDLED, OUTPUT);
+  
+  if (HASONBOARDLED) pinMode(ONBOARDLED, OUTPUT);
   byte ledStatus = HIGH;
 
-  countTCommands = 0;
-
   mySwitch.enableTransmit(RCSwitchPin);
-
+  mySwitch.setRepeatTransmit(RFrepeatTimes);
+  
   Serial.begin(57600);
 
   WiFi.mode(WIFI_STA);
   // uncomment the following if you set a static IP in the begining
   WiFi.config(nkip, nkgateway, nksubnet);
-
+  WiFi.setOutputPower(20.5);
+  
   // call espWiFi2eeprom to connect to saved to eeprom AP or
   // to create an AP to store new values for SSID and password
   espNKWiFiconnect();
@@ -775,7 +793,7 @@ void setup(void) {
   // in NKNTP.h you can set your time zone and DST
   NTP2localTime();
 
-  digitalWrite(ONBOARDLED, HIGH);
+  if (HASONBOARDLED) digitalWrite(ONBOARDLED, HIGH);
 
   delay(100);
 
@@ -799,13 +817,11 @@ void setup(void) {
 
   server.begin();
 
-  // If we got NTP time set up the cleanup function of Once only executed Time Commands
-  if (NTPsuccess)  {
-    delay(100);
-    Alarm.timerRepeat(33 * 60, CleanupTC); // (minutes * seconds) that must have passed in order to clean the alarm events
-    Alarm.delay(0);
-    Serial.println("Cleanup set");
-  }
+  delay(100);
+  // Set up the cleanup function of Once only executed Time Commands and poll NTP server
+  Alarm.timerRepeat(33 * 59, CleanupTC); // (minutes * seconds) that must have passed in order to clean the alarm events, also poll NTP server
+  Alarm.delay(0);
+  Serial.println("Cleanup set");
 
   Serial.println(F("HTTP server started"));
   //debug
