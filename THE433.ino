@@ -347,7 +347,7 @@ void RCSwitchCall(int PulseL, char* RCSCode, String thepinstate) {
   if (HASONBOARDLED) digitalWrite(ONBOARDLED, LOW);
   mySwitch.setPulseLength(PulseL);
   mySwitch.send(RCSCode);
-  //Serial.print(F("RF SEND"));
+  //Serial.println(F("RF SEND"));
   pinstate = thepinstate;
   if (HASONBOARDLED) digitalWrite(ONBOARDLED, HIGH);
 }
@@ -365,7 +365,7 @@ void switchoff1() {
 void RFControlCall(unsigned long RFCbuckets[], char* RFCTimings, String thepinstate ) {
   if (HASONBOARDLED) digitalWrite(ONBOARDLED, LOW);
   RFControl::sendByCompressedTimings(RCSwitchPin, RFCbuckets, RFCTimings, RFrepeatTimes);
-  //Serial.print(F("RF SEND"));  
+  //Serial.println(F("RF SEND"));  
   pinstate = thepinstate;
   if (HASONBOARDLED) digitalWrite(ONBOARDLED, HIGH);
 }
