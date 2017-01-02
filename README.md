@@ -81,8 +81,8 @@ the needed transmitters/receivers for your esp8266 or NodeMCU dev kit.
 **3. Set the appropriate 433 MHz RCSwitch codes to the "*433 functions*" section add new functions if needed**
 
 Code to edit for your RF 433 sockets or other devices:
-Find the // -------------------------------- START 433 functions ---------------------------------
-and edit switchon1() and switchoff1() functions according to your data sniffed from RCSwitch library
+Find the *// -------------------------------- START 433 functions ---------------------------------*
+and edit *switchon1()* and *switchoff1()* functions according to your data sniffed from RCSwitch library
 
     // -------------------------------- with RCSwitch library -------------
     .
