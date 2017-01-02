@@ -126,6 +126,7 @@ Also the equal number of names to the *TcommandsFNames* array. Those last string
 
 
 **4.Other parts of the code to edit**
+
 Your esp8266 local network IP and port
 
     // Update these with values suitable for your network.
