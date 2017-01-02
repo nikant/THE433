@@ -354,6 +354,9 @@ void RCSwitchCall(int PulseL, char* RCSCode, String thepinstate) {
 
 void switchon1() {
   RCSwitchCall(260, "010001111000101001010101", "<h2>RC switch 1 ON</h2>");
+  //Pulse Length-^^ 
+  //Binary Code-------------^^^^ 
+  //HTML string for web page------------------------------^^^^^
 }
 
 void switchoff1() {
