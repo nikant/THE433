@@ -167,7 +167,7 @@ The keyword to enter the Time Commands interface from the main web form
 ESP8266 in the source is set as a WiFi station with a static IP 192.168.1.101
 
 - navigate with your browser at this IP 
-- here you can enter either a command to activate a connected device (you must edit the source code) i.e. SWITCH 1 ON
+- here you can enter either a command to activate a connected device (you must edit the source code) i.e. SWITCH-1-ON
   or you can enter the provided keyword to enter the Time Commands interface i.e. ENTERTIMECOMMANDS
 - at the Time Commands interface you can select a function you want to be executed at a specific time
 - select the time to activate and submit
