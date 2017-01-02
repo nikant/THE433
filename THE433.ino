@@ -370,7 +370,6 @@ void RFControlCall(unsigned long RFCbuckets[], char* RFCTimings, String thepinst
   if (HASONBOARDLED) digitalWrite(ONBOARDLED, HIGH);
 }
 
-// ------------- BRENNENSTUHL A
 void switchon2() {
   unsigned long nsigbuckets[] = {1256, 496, 2984, 6256, 0, 0, 0, 0};
   RFControlCall(nsigbuckets, "01101010010000000101011111011001101001000100101024", "<h2>RC2-1</h2>");
