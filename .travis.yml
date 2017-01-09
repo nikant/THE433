@@ -13,19 +13,15 @@ install:
   - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
 # install lib arduino json not working in 1.6.5
 #  - arduino --install-library "ArduinoJson"
-  - git clone https://github.com/sui77/rc-switch /usr/local/share/arduino/libraries/rc-switch
+  - arduino --save-prefs
   - git clone https://github.com/pimatic/RFControl /usr/local/share/arduino/libraries/RFControl
   - git clone https://github.com/PaulStoffregen/Time /usr/local/share/arduino/libraries/Time
   - git clone https://github.com/PaulStoffregen/TimeAlarms /usr/local/share/arduino/libraries/TimeAlarms
   - git clone https://github.com/JChristensen/Timezone /usr/local/share/arduino/libraries/Timezone 
-  - arduino --install-library rc-switch
-  - arduino --install-library RFControl
-  - arduino --install-library Time
-  - arduino --install-library TimeAlarms
-  - arduino --install-library Timezone
   - arduino --install-boards esp8266:esp8266
   - arduino --board esp8266:esp8266:generic --save-prefs
-  - arduino --pref "compiler.warning_level=all" --save-prefs
+#  - arduino --pref "compiler.warning_level=all" --save-prefs
+   - arduino --pref "compiler.warning_level=default" --save-prefs
 script:
   - "echo $PWD"
   - "echo $HOME"
