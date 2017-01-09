@@ -30,7 +30,7 @@ You can edit espWiFi2eeprom.h in order to change parameters.
 
 
 #include <ESP8266WiFi.h>
-#include <ESP8266Webserver.h>
+#include <ESP8266WebServer.h>
 #include <EEPROM.h>
 
 // defined in espWiFi2eeprom.h , keywords to restart or clear eeprom
