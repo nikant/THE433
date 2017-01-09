@@ -14,6 +14,7 @@ install:
 # install lib arduino json not working in 1.6.5
 #  - arduino --install-library "ArduinoJson"
   - arduino --save-prefs
+  - git clone https://github.com/sui77/rc-switch /usr/local/share/arduino/libraries/rc-switch  
   - git clone https://github.com/pimatic/RFControl /usr/local/share/arduino/libraries/RFControl
   - git clone https://github.com/PaulStoffregen/Time /usr/local/share/arduino/libraries/Time
   - git clone https://github.com/PaulStoffregen/TimeAlarms /usr/local/share/arduino/libraries/TimeAlarms
