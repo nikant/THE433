@@ -25,7 +25,6 @@ script:
   - "echo $PWD"
   - "echo $HOME"
   - "ls $PWD"
-  - source $TRAVIS_BUILD_DIR/travis/common.sh
 #  - build_examples
 #  - "cat $PWD/examples/AutoConnect/AutoConnect.ino"
   - arduino -v --verbose-build --verify $PWD/THE433.ino
@@ -35,5 +34,4 @@ notifications:
   email:
     on_success: change
     on_failure: change
-#
-#
+
