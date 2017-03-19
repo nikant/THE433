@@ -1,7 +1,9 @@
-# THE433
+# THE433 
 
 ## ESP8266 RF433 Interface
 ## "control 433MHz (compatible with Arduino libs) sockets/devices through web and time rules"
+
+[![Build Status](https://travis-ci.org/nikant/THE433.svg?branch=master)](https://travis-ci.org/nikant/THE433)
 
 ----------------
 (esp8266 + RF 433 transmitter + Arduino IDE)
