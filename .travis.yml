@@ -18,7 +18,7 @@ install:
   - git clone https://github.com/PaulStoffregen/Time /usr/local/share/arduino/libraries/Time
   - git clone https://github.com/PaulStoffregen/TimeAlarms /usr/local/share/arduino/libraries/TimeAlarms
   - git clone https://github.com/JChristensen/Timezone /usr/local/share/arduino/libraries/Timezone
-  - arduino --install-boards esp8266:esp8266
+  - arduino --install-boards esp8266:esp8266:2.4.1
   - arduino --board esp8266:esp8266:generic --save-prefs
 #  - arduino --pref "compiler.warning_level=all" --save-prefs
   - arduino --pref "compiler.warning_level=default" --save-prefs
