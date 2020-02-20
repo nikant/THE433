@@ -179,7 +179,7 @@ boolean testWiFi() {
   int c = 0;
   Serial.print(F("Waiting for Wifi to connect"));
   // c at 60 with delay 500 is for 30 seconds ;)
-  while ( c < 60 ) {
+  while ( c < 360 ) {
     Serial.print(".");
     if (WiFi.status() == WL_CONNECTED) {
       Serial.println("");
